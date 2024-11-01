@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>百萬富翁問答遊戲</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <div class="top-section">
+            <div class="question-box">
+                <p id="question">問題將在這裡顯示</p>
+            </div>
+            <div class="money-ladder">
+                <ul id="moneyLadder">
+                    <li>$1,000,000</li>
+                    <li>$500,000</li>
+                    <li>$250,000</li>
+                    <li>$100,000</li>
+                    <li>$50,000</li>
+                    <li>$10,000</li>
+                    <li>$5,000</li>
+                    <li>$1,000</li>
+                </ul>
+            </div>
+        </div>
+        <div class="options-container">
+            <button class="option" onclick="checkAnswer(0)">A: </button>
+            <button class="option" onclick="checkAnswer(1)">B: </button>
+            <button class="option" onclick="checkAnswer(2)">C: </button>
+            <button class="option" onclick="checkAnswer(3)">D: </button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html> 

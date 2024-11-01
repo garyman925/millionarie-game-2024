@@ -1,0 +1,70 @@
+body {
+    margin: 0;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    background-color: #000033;
+    color: white;
+}
+
+.game-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.top-section {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+.question-box {
+    flex: 2;
+    background-color: #000066;
+    padding: 20px;
+    border-radius: 10px;
+    margin-right: 20px;
+}
+
+.money-ladder {
+    flex: 1;
+}
+
+.money-ladder ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.money-ladder li {
+    padding: 10px;
+    margin: 5px 0;
+    background-color: #000066;
+    text-align: right;
+    border-radius: 5px;
+}
+
+.money-ladder li.active {
+    background-color: #ffaa00;
+    color: black;
+}
+
+.options-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.option {
+    padding: 20px;
+    background-color: #000066;
+    border: none;
+    color: white;
+    font-size: 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.option:hover {
+    background-color: #0000aa;
+} 
