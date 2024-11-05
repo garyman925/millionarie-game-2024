@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>百萬富翁問答遊戲</title>
+    <title>Who Wants to Be a Millionaire</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -13,14 +13,14 @@
             <div class="spotlight"></div>
         </div>
         <div class="stats-container">
-            <div class="stat-item">題目: <span id="questionCount">0</span> / <span id="totalQuestions">0</span></div>
-            <div class="stat-item">答對: <span id="correctCount">0</span></div>
-            <div class="stat-item">答錯: <span id="wrongCount">0</span></div>
+            <div class="stat-item">Question: <span id="questionCount">0</span> / <span id="totalQuestions">0</span></div>
+            <div class="stat-item">Correct: <span id="correctCount">0</span></div>
+            <div class="stat-item">Wrong: <span id="wrongCount">0</span></div>
             <div class="stat-item">$<span id="totalMoney">0</span></div>
         </div>
         <div class="top-section">
             <div class="question-box">
-                <p id="question">問題將在這裡顯示</p>
+                <p id="question">Question will appear here</p>
             </div>
             <div class="money-ladder">
                 <ul id="moneyLadder">
@@ -43,14 +43,15 @@
                 <button class="option" onclick="checkAnswer(3)">D: </button>
             </div>
             <div class="hints-container">
-                <button class="hint-btn" onclick="showHint(0)">提示 1</button>
-                <button class="hint-btn" onclick="showHint(1)">提示 2</button>
-                <button class="hint-btn" onclick="showHint(2)">提示 3</button>
+                <button class="hint-btn" onclick="showHint(0)">Hint 1</button>
+                <button class="hint-btn" onclick="showHint(1)">Hint 2</button>
+                <button class="hint-btn" onclick="showHint(2)">Hint 3</button>
                 <div id="hintBubble" class="hint-bubble"></div>
             </div>
         </div>
     </div>
     <script src="script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tsparticles/confetti@3.0.3/tsparticles.confetti.bundle.min.js"></script>
+    <script src="js/howler.min.js"></script>
 </body>
 </html> 

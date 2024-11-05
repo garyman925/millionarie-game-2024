@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Quantico:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sancreek&display=swap');
 
 html,
 body {
@@ -50,8 +51,10 @@ body {
     display: flex;
     justify-content: center;
     flex: 2;
-    background-color: rgba(0, 0, 102, 0.9);
-    border: 1px solid #fff;
+    background-color: rgb(18 5 58 / 90%);
+    border: none;
+    box-shadow: inset 0 0 0 3px #c2e1ff, 
+                inset 0 0 0 8px #7a95af;
     font-size: 2rem;
     padding: 20px;
     border-radius: 10px;
@@ -124,7 +127,7 @@ body {
 .option {
     position: relative;
     padding: 20px;
-    background: linear-gradient(0deg, #050450, #0000ad);
+    background: rgb(18 5 58 / 90%);
     color: white;
     font-size: 2rem;
     cursor: pointer;
@@ -140,7 +143,7 @@ body {
     left: 2px;
     right: 2px;
     bottom: 2px;
-    background: linear-gradient(0deg, #050450, #0000ad);
+    background: #14053e;
     clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%);
     z-index: -1;
 }
@@ -157,7 +160,7 @@ body {
     left: -2px;
     right: -2px;
     bottom: -2px;
-    background: #ffd916;
+    background: #c2e1ff;
     z-index: -2;
     clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%);
 }
@@ -447,4 +450,50 @@ body {
 
 .option.wrong-answer::after {
     background: #ff0000 !important;
+}
+
+/* 添加彈出效果的樣式 */
+.correct-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    text-align: center;
+    animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    background: rgba(0, 0, 0, 0.8);
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 0 50px rgba(0, 255, 0, 0.3);
+    width: 80%;
+    max-width: 800px;
+}
+
+.correct-text {
+    font-family: 'Sancreek', cursive;
+    font-size: 5rem;
+    color: #00ff00;
+    text-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+    margin: 0;
+    animation: textGlow 2s infinite;
+}
+
+@keyframes popIn {
+    0% {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 0;
+    }
+    80% {
+        transform: translate(-50%, -50%) scale(1.1);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+@keyframes textGlow {
+    0% { text-shadow: 0 0 20px rgba(0, 255, 0, 0.5); }
+    50% { text-shadow: 0 0 40px rgba(0, 255, 0, 0.8); }
+    100% { text-shadow: 0 0 20px rgba(0, 255, 0, 0.5); }
 }

@@ -18,21 +18,20 @@ function showConfetti() {
 
 const questions = [
     {
-        question: "太陽系中最大的行星是？",
-        options: ["木星", "土星", "天王星", "海王星"],
+        question: "Which is the largest planet in our solar system?",
+        options: ["Jupiter", "Saturn", "Uranus", "Neptune"],
         correct: 0
     },
     {
-        question: "長城有多長？",
-        options: ["5000公里", "6000公里", "7000公里", "8000公里"],
+        question: "How long is the Great Wall of China?",
+        options: ["5,000 km", "6,000 km", "7,000 km", "8,000 km"],
         correct: 2
     },
     {
-        question: "地球的軸心是什麼？",
-        options: ["北極", "南極", "赤道", "地球中心"],
+        question: "What is Earth's axis?",
+        options: ["North Pole", "South Pole", "Equator", "Earth's Core"],
         correct: 1
     }
-    // 可以繼續添加更多問題...
 ];
 
 let currentQuestion = 0;
@@ -43,10 +42,10 @@ let wrongCount = 0;
 // 定義獎金階梯
 const moneyLadder = [1000, 5000, 10000, 50000, 100000, 250000, 500000, 1000000];
 
-// 添加提示數組
+// 添加提示數
 const hints = [
-    ["這是第一個提示", "這是第二個提示", "這是第三個提示"],
-    ["提示 A", "提示 B", "提示 C"],
+    ["This planet has a big red spot", "It's a gas giant", "Largest by mass and volume"],
+    ["Hint A", "Hint B", "Hint C"],
     ["Hint 1", "Hint 2", "Hint 3"]
     // 為每個問題添加對應的提示...
 ];
@@ -127,14 +126,26 @@ function checkAnswer(selectedOption) {
         currentMoney++;
         updateMoneyLadder();
         
-        questionBox.innerHTML = `
-            <div style="color: #00ff00; font-size: 2.5rem; text-align: center;">
-                答對了！
-                <div style="font-size: 1.5rem; margin-top: 10px;">
-                    準備下一題...
-                </div>
+        // 創建彈出元素
+        const popup = document.createElement('div');
+        popup.className = 'correct-popup';
+        popup.innerHTML = `
+            <h1 class="correct-text">YOU ARE CORRECT!</h1>
+            <div style="color: #00ff00; font-size: 1.5rem; margin-top: 20px;">
+                The answer is: ${question.options[question.correct]}
             </div>
         `;
+        
+        // 添加到頁面
+        document.body.appendChild(popup);
+        
+        // 2秒後移除彈出元素
+        setTimeout(() => {
+            popup.remove();
+        }, 2000);
+        
+        // 保持問題框的顯示
+        questionBox.style.opacity = '0.3';
     } else {
         // 標記錯誤選項
         options[selectedOption].classList.add('wrong-answer');
@@ -144,9 +155,9 @@ function checkAnswer(selectedOption) {
         
         questionBox.innerHTML = `
             <div style="color: #ff0000; font-size: 2.5rem; text-align: center;">
-                答錯了！
+                Wrong!
                 <div style="font-size: 1.5rem; margin-top: 10px;">
-                    正確答案是：${question.options[question.correct]}
+                    Correct answer: ${question.options[question.correct]}
                 </div>
             </div>
         `;
@@ -155,7 +166,6 @@ function checkAnswer(selectedOption) {
     currentQuestion++;
     updateStats();
     
-    // 延遲後重置按鈕樣式並顯示下一題
     setTimeout(() => {
         // 重置所有按鈕的樣式
         for (let i = 0; i < options.length; i++) {
@@ -163,15 +173,18 @@ function checkAnswer(selectedOption) {
             options[i].classList.remove('correct-answer', 'wrong-answer');
         }
         
+        // 恢復問題框的透明度
+        questionBox.style.opacity = '1';
+        
         if (currentQuestion < questions.length) {
             displayQuestion();
         } else {
             questionBox.innerHTML = `
                 <div style="text-align: center;">
-                    <h2>遊戲結束！</h2>
-                    <p>總題數: ${questions.length}</p>
-                    <p>答對: ${correctCount}</p>
-                    <p>答錯: ${wrongCount}</p>
+                    <h2>Game Over!</h2>
+                    <p>Total Questions: ${questions.length}</p>
+                    <p>Correct: ${correctCount}</p>
+                    <p>Wrong: ${wrongCount}</p>
                 </div>
             `;
             setTimeout(() => {
@@ -213,4 +226,64 @@ function updateStats() {
 }
 
 // 開始遊戲
-startGame(); 
+startGame();
+
+// 在文件開頭添加 debug 模式變量
+let debugMode = false;
+
+// 添加鍵盤事件監聽器
+document.addEventListener('keydown', function(event) {
+    // 按下 'D' 鍵切換 debug 模式
+    if (event.key === 'd' || event.key === 'D') {
+        debugMode = !debugMode;
+        const question = questions[currentQuestion];
+        if (debugMode) {
+            console.log(`Debug Mode ON`);
+            console.log(`Current Question: ${currentQuestion + 1}`);
+            console.log(`Correct Answer: ${String.fromCharCode(65 + question.correct)} (${question.options[question.correct]})`);
+            
+            // 在問題框中顯示正確答案
+            const questionBox = document.getElementById('question');
+            const originalText = questionBox.textContent;
+            questionBox.innerHTML = `
+                <div style="color: yellow; font-size: 1.2rem; margin-bottom: 10px;">
+                    Debug: Correct Answer is ${String.fromCharCode(65 + question.correct)}
+                </div>
+                ${originalText}
+            `;
+        } else {
+            console.log('Debug Mode OFF');
+            displayQuestion(); // 重新顯示問題，移除 debug 信息
+        }
+    }
+    
+    // 修改 'C' 鍵的測試部分
+    if (event.key === 'c' || event.key === 'C') {
+        const question = questions[currentQuestion];
+        showConfetti();
+        
+        // 創建彈出元素
+        const popup = document.createElement('div');
+        popup.className = 'correct-popup';
+        popup.innerHTML = `
+            <h1 class="correct-text">YOU ARE CORRECT!</h1>
+            <div style="color: #00ff00; font-size: 1.5rem; margin-top: 20px;">
+                The answer is: ${question.options[question.correct]}
+            </div>
+        `;
+        
+        // 添加到頁面
+        document.body.appendChild(popup);
+        
+        // 使問題框變暗
+        const questionBox = document.getElementById("question");
+        questionBox.style.opacity = '0.3';
+        
+        // 2秒後移除彈出元素並恢復問題框
+        setTimeout(() => {
+            popup.remove();
+            questionBox.style.opacity = '1';
+            displayQuestion();
+        }, 2000);
+    }
+}); 
