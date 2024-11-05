@@ -259,14 +259,14 @@ body {
 
 /* 為金額添加特殊樣式 */
 .stat-item:last-child {
-    font-family: 'Silkscreen', cursive;
+    font-family: 'Sancreek', cursive;
     position: relative;
     margin-left: auto;
     font-size: 4rem;
 }
 
 #totalMoney {
-    font-family: 'Silkscreen', cursive;
+    font-family: 'Sancreek', cursive;
     color: #ffaa00;
     font-weight: bold;
 }
@@ -496,4 +496,41 @@ body {
     0% { text-shadow: 0 0 20px rgba(0, 255, 0, 0.5); }
     50% { text-shadow: 0 0 40px rgba(0, 255, 0, 0.8); }
     100% { text-shadow: 0 0 20px rgba(0, 255, 0, 0.5); }
+}
+
+/* 添加倒數計時的樣式 */
+.countdown-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.countdown-number {
+    font-family: 'Sancreek', cursive;
+    font-size: 10rem;
+    color: #fff;
+    text-shadow: 0 0 30px rgba(255, 255, 255, 0.8);
+    animation: countdownPulse 1s ease-in-out;
+}
+
+@keyframes countdownPulse {
+    0% {
+        transform: scale(2);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(0);
+        opacity: 0;
+    }
 }

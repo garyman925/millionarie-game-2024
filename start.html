@@ -107,9 +107,21 @@
         <button class="start-button" onclick="startGame()">Start Game</button>
     </div>
 
+    <script src="js/howler.min.js"></script>
+    <script src="sounds.js"></script>
     <script>
+        // 頁面加載時播放背景音樂
+        window.addEventListener('load', function() {
+            if (typeof SoundManager !== 'undefined') {
+                SoundManager.playBGM();
+            }
+        });
+
         function startGame() {
-            window.location.href = 'index.html';
+
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1000);
         }
     </script>
 </body>

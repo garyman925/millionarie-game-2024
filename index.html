@@ -50,8 +50,42 @@
             </div>
         </div>
     </div>
+    <script src="js/howler.min.js"></script>
+    <script src="sounds.js"></script>
+    <script>
+        // 在遊戲頁面加載時先顯示倒數計時
+        window.addEventListener('load', function() {
+            // 創建倒數計時覆蓋層
+            const overlay = document.createElement('div');
+            overlay.className = 'countdown-overlay';
+            document.body.appendChild(overlay);
+
+            // 開始倒數
+            let count = 3;
+            function countdown() {
+                if (count > 0) {
+                    overlay.innerHTML = `<div class="countdown-number">${count}</div>`;
+                    count--;
+                    setTimeout(countdown, 1000);
+                } else {
+                    overlay.innerHTML = `<div class="countdown-number">GO!</div>`;
+                    // 播放開始音效
+                    SoundManager.playStartBGM();
+                    
+                    setTimeout(() => {
+                        overlay.remove();
+                        // 監聽開始音效結束事件
+                        SoundManager.sounds.start_bgm.once('end', function() {
+                            // 開始音效結束後播放主背景音樂
+                            SoundManager.playMainBGM();
+                        });
+                    }, 1000);
+                }
+            }
+            countdown();
+        });
+    </script>
     <script src="script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tsparticles/confetti@3.0.3/tsparticles.confetti.bundle.min.js"></script>
-    <script src="js/howler.min.js"></script>
 </body>
 </html> 

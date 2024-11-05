@@ -121,6 +121,7 @@ function checkAnswer(selectedOption) {
     options[question.correct].classList.add('correct-answer');
     
     if (selectedOption === question.correct) {
+        SoundManager.playCorrect();
         showConfetti();
         correctCount++;
         currentMoney++;
@@ -147,6 +148,7 @@ function checkAnswer(selectedOption) {
         // 保持問題框的顯示
         questionBox.style.opacity = '0.3';
     } else {
+        SoundManager.playWrong();
         // 標記錯誤選項
         options[selectedOption].classList.add('wrong-answer');
         wrongCount++;
@@ -212,6 +214,9 @@ function updateMoneyLadder() {
         setTimeout(() => {
             ladderItems[activeIndex].classList.add("active");
         }, 100);
+    }
+    if (currentMoney > 0) {
+        SoundManager.playLevelUp();
     }
 }
 
@@ -287,3 +292,10 @@ document.addEventListener('keydown', function(event) {
         }, 2000);
     }
 }); 
+
+// 在選項按鈕的點擊事件中
+document.querySelectorAll('.option').forEach(button => {
+    button.addEventListener('mouseover', () => {
+        SoundManager.playSelect();
+    });
+});
