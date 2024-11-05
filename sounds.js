@@ -27,6 +27,10 @@ const SoundManager = {
         level_up: new Howl({
             src: ['sounds/start-bgm.mp3'],
             volume: 0.8
+        }),
+        final_bgm: new Howl({
+            src: ['sounds/final-answer.mp3'],
+            volume: 0.8
         })
     },
 
@@ -56,6 +60,9 @@ const SoundManager = {
     },
     playLevelUp: function() {
         this.sounds.level_up.play();
+    },
+    playFinalBGM: function() {
+        this.sounds.final_bgm.play();
     },
 
     // 全局音量控制

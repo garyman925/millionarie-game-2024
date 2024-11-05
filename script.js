@@ -233,8 +233,17 @@ function updateStats() {
     document.getElementById('totalQuestions').textContent = questions.length;
     document.getElementById('correctCount').textContent = correctCount;
     document.getElementById('wrongCount').textContent = wrongCount;
-    // 更新獎金顯示，使用千分位格式
-    document.getElementById('totalMoney').textContent = moneyLadder[currentMoney - 1]?.toLocaleString() || 0;
+    
+    // 獲取當前和新的金額
+    const currentAmount = moneyLadder[currentMoney - 2] || 0;
+    const newAmount = moneyLadder[currentMoney - 1] || 0;
+    
+    // 如果金額有變化，使用動畫
+    if (newAmount > currentAmount) {
+        const moneyElement = document.getElementById('totalMoney');
+        AnimationManager.animateNumber(moneyElement, currentAmount, newAmount);
+        AnimationManager.addBounceEffect(moneyElement.parentElement);
+    }
 }
 
 // 開始遊戲

@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Game Results - Who Wants to Be a Millionaire</title>
+    <link rel="stylesheet" href="style.css">
     <style>
         body {
             margin: 0;
@@ -116,6 +117,9 @@
     <script>
         // 從 localStorage 獲取遊戲數據
         window.addEventListener('load', function() {
+            // 播放結束音樂
+            SoundManager.playFinalBGM();
+            
             const gameData = JSON.parse(localStorage.getItem('gameResults'));
             if (gameData) {
                 document.getElementById('finalMoney').textContent = gameData.money.toLocaleString();
@@ -141,6 +145,8 @@
         });
 
         function playAgain() {
+            // 停止結束音樂
+            SoundManager.sounds.final_bgm.stop();
             window.location.href = 'index.html';
         }
     </script>
