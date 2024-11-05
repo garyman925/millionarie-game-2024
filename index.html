@@ -7,8 +7,17 @@
 </head>
 <body>
     <div class="game-container">
-        <div class="spotlight"></div>
-        <div class="spotlight-2"></div>
+        <div class="spotlight-container">
+            <div class="spotlight"></div>
+            <div class="spotlight-main"></div>
+            <div class="spotlight"></div>
+        </div>
+        <div class="stats-container">
+            <div class="stat-item">題目: <span id="questionCount">0</span> / <span id="totalQuestions">0</span></div>
+            <div class="stat-item">答對: <span id="correctCount">0</span></div>
+            <div class="stat-item">答錯: <span id="wrongCount">0</span></div>
+            <div class="stat-item">$<span id="totalMoney">0</span></div>
+        </div>
         <div class="top-section">
             <div class="question-box">
                 <p id="question">問題將在這裡顯示</p>
@@ -26,11 +35,19 @@
                 </ul>
             </div>
         </div>
-        <div class="options-container">
-            <button class="option" onclick="checkAnswer(0)">A: </button>
-            <button class="option" onclick="checkAnswer(1)">B: </button>
-            <button class="option" onclick="checkAnswer(2)">C: </button>
-            <button class="option" onclick="checkAnswer(3)">D: </button>
+        <div class="game-controls">
+            <div class="options-container">
+                <button class="option" onclick="checkAnswer(0)">A: </button>
+                <button class="option" onclick="checkAnswer(1)">B: </button>
+                <button class="option" onclick="checkAnswer(2)">C: </button>
+                <button class="option" onclick="checkAnswer(3)">D: </button>
+            </div>
+            <div class="hints-container">
+                <button class="hint-btn" onclick="showHint(0)">提示 1</button>
+                <button class="hint-btn" onclick="showHint(1)">提示 2</button>
+                <button class="hint-btn" onclick="showHint(2)">提示 3</button>
+                <div id="hintBubble" class="hint-bubble"></div>
+            </div>
         </div>
     </div>
     <script src="script.js"></script>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>百萬富翁問答遊戲</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(#29289d, #060606);
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+
+        .start-container {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .game-title {
+            color: #fff;
+            font-size: 4rem;
+            margin-bottom: 2rem;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .start-button {
+            padding: 20px 60px;
+            font-size: 1.3rem;
+            background: linear-gradient(0deg, #050450, #0000ad);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .start-button::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: #2a4093;
+            z-index: -1;
+            border-radius: 12px;
+        }
+
+        .start-button:hover {
+            transform: scale(1.05);
+            background: linear-gradient(0deg, #0000ad, #0000ff);
+        }
+
+        /* 射燈效果 */
+        .spotlight {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background-image: url('images/spot-light.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            pointer-events: none;
+        }
+
+        .spotlight-left {
+            top: -30%;
+            left: 0;
+            transform: rotate(44deg);
+            animation: spotlightMoveLeft 5s infinite linear;
+        }
+
+        .spotlight-right {
+            top: -30%;
+            right: 0;
+            transform: rotate(-44deg);
+            animation: spotlightMoveRight 5s infinite linear;
+        }
+
+        @keyframes spotlightMoveLeft {
+            0% { transform: rotate(30deg); }
+            50% { transform: rotate(60deg); }
+            100% { transform: rotate(30deg); }
+        }
+
+        @keyframes spotlightMoveRight {
+            0% { transform: rotate(-30deg); }
+            50% { transform: rotate(-60deg); }
+            100% { transform: rotate(-30deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="spotlight spotlight-left"></div>
+    <div class="spotlight spotlight-right"></div>
+    
+    <div class="start-container">
+        <h1 class="game-title">百萬富翁問答遊戲</h1>
+        <button class="start-button" onclick="startGame()">開始遊戲</button>
+    </div>
+
+    <script>
+        function startGame() {
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html> 
