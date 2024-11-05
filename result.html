@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Game Results - Who Wants to Be a Millionaire</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            background: radial-gradient(#670cff, #000000);
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        .result-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .final-score {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .money-earned {
+            font-family: 'Sancreek', cursive;
+            font-size: 5rem;
+            color: #ffaa00;
+            text-shadow: 0 0 20px rgba(255, 170, 0, 0.5);
+            margin: 20px 0;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin: 20px 0;
+            font-size: 1.5rem;
+        }
+
+        .question-review {
+            margin-top: 40px;
+        }
+
+        .question-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .question-text {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .answer {
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+
+        .correct-answer {
+            background: rgba(0, 255, 0, 0.2);
+            border: 1px solid #00ff00;
+        }
+
+        .wrong-answer {
+            background: rgba(255, 0, 0, 0.2);
+            border: 1px solid #ff0000;
+        }
+
+        .play-again {
+            display: block;
+            margin: 40px auto;
+            padding: 15px 40px;
+            font-size: 1.5rem;
+            background: linear-gradient(0deg, #050450, #0000ad);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .play-again:hover {
+            background: linear-gradient(0deg, #0000ad, #0000ff);
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="result-container">
+        <div class="final-score">
+            <h1>Game Over!</h1>
+            <div class="money-earned">$<span id="finalMoney">0</span></div>
+            <div class="stats">
+                <div>Correct: <span id="correctCount">0</span></div>
+                <div>Wrong: <span id="wrongCount">0</span></div>
+                <div>Total: <span id="totalQuestions">0</span></div>
+            </div>
+        </div>
+
+        <div class="question-review" id="questionReview">
+            <!-- Questions will be inserted here by JavaScript -->
+        </div>
+
+        <button class="play-again" onclick="playAgain()">Play Again</button>
+    </div>
+
+    <script src="js/howler.min.js"></script>
+    <script src="sounds.js"></script>
+    <script>
+        // 從 localStorage 獲取遊戲數據
+        window.addEventListener('load', function() {
+            const gameData = JSON.parse(localStorage.getItem('gameResults'));
+            if (gameData) {
+                document.getElementById('finalMoney').textContent = gameData.money.toLocaleString();
+                document.getElementById('correctCount').textContent = gameData.correct;
+                document.getElementById('wrongCount').textContent = gameData.wrong;
+                document.getElementById('totalQuestions').textContent = gameData.questions.length;
+
+                // 顯示所有問題和答案
+                const reviewContainer = document.getElementById('questionReview');
+                gameData.questions.forEach((q, index) => {
+                    const questionDiv = document.createElement('div');
+                    questionDiv.className = 'question-item';
+                    questionDiv.innerHTML = `
+                        <div class="question-text">Question ${index + 1}: ${q.question}</div>
+                        <div class="answer ${q.userAnswer === q.correct ? 'correct-answer' : 'wrong-answer'}">
+                            Your answer: ${q.options[q.userAnswer]}
+                            ${q.userAnswer !== q.correct ? `<br>Correct answer: ${q.options[q.correct]}` : ''}
+                        </div>
+                    `;
+                    reviewContainer.appendChild(questionDiv);
+                });
+            }
+        });
+
+        function playAgain() {
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html> 

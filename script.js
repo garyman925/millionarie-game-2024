@@ -181,17 +181,24 @@ function checkAnswer(selectedOption) {
         if (currentQuestion < questions.length) {
             displayQuestion();
         } else {
-            questionBox.innerHTML = `
-                <div style="text-align: center;">
-                    <h2>Game Over!</h2>
-                    <p>Total Questions: ${questions.length}</p>
-                    <p>Correct: ${correctCount}</p>
-                    <p>Wrong: ${wrongCount}</p>
-                </div>
-            `;
-            setTimeout(() => {
-                startGame();
-            }, 3000);
+            // 保存遊戲結果
+            const gameResults = {
+                money: moneyLadder[currentMoney - 1] || 0,
+                correct: correctCount,
+                wrong: wrongCount,
+                questions: questions.map((q, index) => ({
+                    ...q,
+                    userAnswer: index < currentQuestion ? (
+                        options[index].classList.contains('correct-answer') ? q.correct : 
+                        options[index].classList.contains('wrong-answer') ? index : q.correct
+                    ) : null
+                }))
+            };
+            localStorage.setItem('gameResults', JSON.stringify(gameResults));
+            
+            // 跳轉到結果頁面
+            window.location.href = 'result.html';
+            return;
         }
     }, 2000);
 }
@@ -290,6 +297,26 @@ document.addEventListener('keydown', function(event) {
             questionBox.style.opacity = '1';
             displayQuestion();
         }, 2000);
+    }
+
+    // 添加 'R' 鍵來測試結果頁面
+    if (event.key === 'r' || event.key === 'R') {
+        // 創建測試用的遊戲結果數據
+        const testResults = {
+            money: 100000,
+            correct: 2,
+            wrong: 1,
+            questions: questions.map((q, index) => ({
+                ...q,
+                userAnswer: index % 2 === 0 ? q.correct : (q.correct + 1) % 4 // 模擬一些答對一些答錯
+            }))
+        };
+        
+        // 保存測試數據到 localStorage
+        localStorage.setItem('gameResults', JSON.stringify(testResults));
+        
+        // 跳轉到結果頁面
+        window.location.href = 'result.html';
     }
 }); 
 
