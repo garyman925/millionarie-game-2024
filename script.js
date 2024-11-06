@@ -96,21 +96,29 @@ let usedHints = new Set();
 function showHint(hintIndex) {
     if (usedHints.has(hintIndex)) return;
     
-    const hintBubble = document.getElementById('hintBubble');
-    const currentHints = hints[currentQuestion] || ["提示不可用"];
-    const hintText = currentHints[hintIndex];
-    
-    hintBubble.textContent = hintText;
-    hintBubble.style.display = 'block';
-    
     // 禁用已使用的提示按鈕
     document.getElementsByClassName('hint-btn')[hintIndex].disabled = true;
     usedHints.add(hintIndex);
     
-    // 3秒後隱藏提示
-    setTimeout(() => {
-        hintBubble.style.display = 'none';
-    }, 3000);
+    // 獲取當前問題
+    const question = questions[currentQuestion];
+    const correctAnswer = question.correct;
+    
+    // 獲取所有選項按鈕
+    const options = document.getElementsByClassName("option");
+    
+    // 創建錯誤答案的索引數組（排除正確答案）
+    const wrongAnswers = [0, 1, 2, 3].filter(i => i !== correctAnswer);
+    
+    // 隨機選擇兩個錯誤答案
+    const shuffled = wrongAnswers.sort(() => 0.5 - Math.random());
+    const toHide = shuffled.slice(0, 2);
+    
+    // 將選中的錯誤答案變暗
+    toHide.forEach(index => {
+        options[index].style.opacity = "0.3";
+        options[index].disabled = true;
+    });
 }
 
 function startGame() {
@@ -121,10 +129,20 @@ function startGame() {
     updateStats();
     displayQuestion();
     updateMoneyLadder();
+    
+    // 重置提示按鈕和選項透明度
     usedHints.clear();
+    const options = document.getElementsByClassName('option');
     const hintBtns = document.getElementsByClassName('hint-btn');
+    
+    // 重置所有按鈕狀態
     for (let btn of hintBtns) {
         btn.disabled = false;
+    }
+    
+    for (let option of options) {
+        option.style.opacity = "1";
+        option.disabled = false;
     }
 }
 
@@ -140,6 +158,8 @@ function displayQuestion() {
     
     const options = document.getElementsByClassName("option");
     for (let i = 0; i < options.length; i++) {
+        options[i].style.opacity = "1";
+        options[i].disabled = false;
         options[i].textContent = `${String.fromCharCode(65 + i)}: ${question.options[i]}`;
     }
     
