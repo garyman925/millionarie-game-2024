@@ -1,19 +1,45 @@
 const confettiConfig = {
-    spread: 360,
+    particleCount: 200,
+    spread: 150,
+    origin: { y: 0 },
+    gravity: 3,
     ticks: 100,
-    gravity: 0.8,
-    decay: 0.94,
-    startVelocity: 30,
-    shapes: ["square", "circle"],
-    colors: ["#ff0000", "#00ff00", "#0000ff", "#ffff00", "#ff00ff", "#00ffff"]
+    startVelocity: 150,
+    shapes: ["square"],
+    colors: [
+        "#FFD700",
+        "#DAA520",
+        "#B8860B",
+        "#FFA500",
+        "#F0E68C"
+    ],
+    scalar: 3,
+    zIndex: 100,
+    disableForReducedMotion: true
 };
 
 function showConfetti() {
     confetti({
         ...confettiConfig,
-        particleCount: 100,
-        origin: { x: 0.5, y: 0.3 }
+        origin: { x: 0.5, y: 0 },
+        angle: 90,
+        drift: 1
     });
+
+    setTimeout(() => {
+        confetti({
+            ...confettiConfig,
+            origin: { x: 0.4, y: 0 },
+            angle: 85,
+            particleCount: 50
+        });
+        confetti({
+            ...confettiConfig,
+            origin: { x: 0.6, y: 0 },
+            angle: 95,
+            particleCount: 50
+        });
+    }, 1000);
 }
 
 const questions = [
@@ -39,8 +65,22 @@ let currentMoney = 0;
 let correctCount = 0;
 let wrongCount = 0;
 
-// 定義獎金階梯
-const moneyLadder = [1000, 5000, 10000, 50000, 100000, 250000, 500000, 1000000];
+// 修改獎金階梯數組
+const moneyLadder = [
+    1000,
+    1500,
+    2500,
+    5000,
+    7500,
+    10000,
+    15000,
+    25000,
+    50000,
+    100000,
+    250000,
+    500000,
+    1000000
+];
 
 // 添加提示數
 const hints = [
@@ -274,7 +314,7 @@ document.addEventListener('keydown', function(event) {
             `;
         } else {
             console.log('Debug Mode OFF');
-            displayQuestion(); // 重新顯示問題，移除 debug 信息
+            displayQuestion(); // 重新顯示問題，移除 debug 息
         }
     }
     

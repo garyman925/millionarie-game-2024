@@ -28,15 +28,13 @@ class SpriteAnimation {
             this.canvas.width = firstFrame.sourceSize.w;
             this.canvas.height = firstFrame.sourceSize.h;
             
-            this.canvas.style.position = 'absolute';
+            this.canvas.style.position = this.options.position;
             
             this.canvas.style.top = this.options.top;
             this.canvas.style.left = this.options.left;
             
-            if (this.options.position === 'center') {
-                this.canvas.style.transform = 'translate(-50%, -50%)';
-            } else {
-                this.canvas.style.transform = this.options.transform || 'none';
+            if (this.options.transform) {
+                this.canvas.style.transform = this.options.transform;
             }
             
             this.canvas.style.width = this.options.width;
@@ -46,7 +44,8 @@ class SpriteAnimation {
             this.start();
         };
         
-        container.appendChild(this.canvas);
+        container.prepend(this.canvas);
+        return this.canvas;
     }
 
     animate() {

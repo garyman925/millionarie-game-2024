@@ -1,16 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Quantico:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Sancreek&display=swap');
 
-html,
 body {
-    height: 100%;
+    height: 100vh;
 }
 
 body {
     margin: 0;
-    padding: 20px;
     font-family: Arial, sans-serif;
     background: radial-gradient(#670cff, #000000);
+    background-image: url('images/background.png');
+    background-size: cover;
+    background-position: center;
     color: white;
 }
 
@@ -20,15 +21,15 @@ body {
     flex-direction: column;
     justify-content: center;
     max-width: 1200px;
-    height: 100%;
     margin: 0 auto;
 }
 
 .top-section {
     display: flex;
+    align-items: end;
     justify-content: space-between;
-    margin-bottom: 30px;
     position: relative;
+    min-height: 300px;
 }
 
 .top-section::before {
@@ -58,9 +59,11 @@ body {
     font-size: 2rem;
     padding: 20px;
     border-radius: 10px;
-    margin-right: 20px;
+    margin-top: auto;
+    margin-bottom: 3%;
+    margin-right: 3%;
     position: relative;
-    z-index: 1;
+    z-index: 2;
 }
 
     .question-box>p{ margin: auto; }
@@ -81,7 +84,7 @@ body {
     background-color: #c3c7d33d;
     border-radius: 5px;
     font-family: "Quantico", sans-serif;
-    font-size: 1.8rem;
+    font-size: 1.3rem;
     letter-spacing: 1px;
 }
 
@@ -244,8 +247,8 @@ body {
 .stats-container {
     display: flex;
     justify-content: flex-start;
+    align-items: center;
     gap: 30px;
-    margin-bottom: 20px;
     background: transparent;
     border-radius: 10px;
     border: 1px solid transparent;
@@ -452,7 +455,7 @@ body {
     background: #ff0000 !important;
 }
 
-/* 添加彈出效果的樣式 */
+/* 添���彈出效果的樣式 */
 .correct-popup {
     position: fixed;
     top: 50%;
