@@ -6,15 +6,18 @@
     <link rel="stylesheet" href="style.css">
     <style>
         body {
+            position: relative;
             margin: 0;
-            padding: 20px;
-            min-height: 100vh;
-            background: radial-gradient(#670cff, #000000);
+            background: url(images/background.png);
+            background-repeat: no-repeat;
+            background-size: cover;
             color: white;
             font-family: Arial, sans-serif;
         }
 
         .result-container {
+            position: relative;
+            z-index: 2;
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
@@ -23,27 +26,42 @@
         .final-score {
             text-align: center;
             margin-bottom: 40px;
+            padding-top: 40px;
         }
+          .final-score .stats{
+                display: flex;
+                justify-content: center;
+                gap: 40px;
+                font-size: 1.8rem;
+                font-weight: bold;
+            }
 
-        .money-earned {
-            font-family: 'Sancreek', cursive;
-            font-size: 5rem;
-            color: #ffaa00;
-            text-shadow: 0 0 20px rgba(255, 170, 0, 0.5);
-            margin: 20px 0;
-        }
-
-        .stats {
+        .final-results{
             display: flex;
             justify-content: center;
             gap: 40px;
-            margin: 20px 0;
-            font-size: 1.5rem;
         }
 
-        .question-review {
-            margin-top: 40px;
+        .money-earned, .score-earned {
+            font-family: 'Sancreek', cursive;
+            font-size: 5rem;
+            text-shadow: 0 0 20px rgba(255, 170, 0, 0.5);
         }
+
+        .money-earned {
+            color: #ffaa00;
+        }
+
+        .score-earned {
+            color: #00ffaa;
+        }
+
+        .result-label {
+            font-size: 1.5rem;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
 
         .question-item {
             background: rgba(255, 255, 255, 0.1);
@@ -91,13 +109,34 @@
             background: linear-gradient(0deg, #0000ad, #0000ff);
             transform: scale(1.05);
         }
+
+        .canvas-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
     </style>
 </head>
 <body>
+    <div class="canvas-container"></div>
+
     <div class="result-container">
         <div class="final-score">
-            <h1>Game Over!</h1>
-            <div class="money-earned">$<span id="finalMoney">0</span></div>
+            <h1>Game Results</h1>
+            <div class="final-results">
+                <div>
+                    <div class="result-label">Final Money</div>
+                    <div class="money-earned">$<span id="finalMoney">0</span></div>
+                </div>
+                <div>
+                    <div class="result-label">Final Score</div>
+                    <div class="score-earned"><span id="finalScore">0</span></div>
+                </div>
+            </div>
             <div class="stats">
                 <div>Correct: <span id="correctCount">0</span></div>
                 <div>Wrong: <span id="wrongCount">0</span></div>
@@ -114,15 +153,34 @@
 
     <script src="js/howler.min.js"></script>
     <script src="sounds.js"></script>
+    <script src="animations-sprite.js"></script>
     <script>
         // 從 localStorage 獲取遊戲數據
         window.addEventListener('load', function() {
             // 播放結束音樂
             SoundManager.playFinalBGM();
             
+            // 載入 bug-talking 動畫
+            fetch('images/bug-talking.json')
+                .then(response => response.json())
+                .then(data => {
+                    const bugAnimation = new SpriteAnimation('images/bug-talking.png', data, {
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        width: '400px',
+                        height: 'auto',
+                        transform: 'translate(-50%, -50%)',
+                        zIndex: '1'
+                    });
+                    const canvasContainer = document.querySelector('.canvas-container');
+                    bugAnimation.createCanvas(canvasContainer);
+                });
+            
             const gameData = JSON.parse(localStorage.getItem('gameResults'));
             if (gameData) {
                 document.getElementById('finalMoney').textContent = gameData.money.toLocaleString();
+                document.getElementById('finalScore').textContent = gameData.score.toLocaleString();
                 document.getElementById('correctCount').textContent = gameData.correct;
                 document.getElementById('wrongCount').textContent = gameData.wrong;
                 document.getElementById('totalQuestions').textContent = gameData.questions.length;

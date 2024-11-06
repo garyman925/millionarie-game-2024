@@ -93,8 +93,15 @@ const hints = [
 // 記錄已使用的提示按鈕
 let usedHints = new Set();
 
+// 添加分數變量
+let currentScore = 0;
+let usedHintOnCurrentQuestion = false;
+
 function showHint(hintIndex) {
     if (usedHints.has(hintIndex)) return;
+    
+    // 標記當前問題使用了提示
+    usedHintOnCurrentQuestion = true;
     
     // 禁用已使用的提示按鈕
     document.getElementsByClassName('hint-btn')[hintIndex].disabled = true;
@@ -126,6 +133,8 @@ function startGame() {
     currentMoney = 0;
     correctCount = 0;
     wrongCount = 0;
+    currentScore = 0;  // 重置分數
+    usedHintOnCurrentQuestion = false;
     updateStats();
     displayQuestion();
     updateMoneyLadder();
@@ -186,6 +195,16 @@ function checkAnswer(selectedOption) {
         correctCount++;
         currentMoney++;
         updateMoneyLadder();
+        
+        // 計算分數
+        if (usedHintOnCurrentQuestion) {
+            currentScore += 990;  // 使用提示後只得到 990 分
+        } else {
+            currentScore += 1000; // 沒使用提示得到 1000 分
+        }
+        
+        // 更新分數顯示
+        document.getElementById('scoreCount').textContent = currentScore;
         
         // 創建彈出元素
         const popup = document.createElement('div');
@@ -272,6 +291,7 @@ function checkAnswer(selectedOption) {
             // 保存遊戲結果
             const gameResults = {
                 money: moneyLadder[currentMoney - 1] || 0,
+                score: currentScore, // 添加分數
                 correct: correctCount,
                 wrong: wrongCount,
                 questions: questions.map((q, index) => ({
@@ -289,6 +309,9 @@ function checkAnswer(selectedOption) {
             return;
         }
     }, 2000);
+    
+    // 重置提示使用標記
+    usedHintOnCurrentQuestion = false;
 }
 
 function updateMoneyLadder() {
@@ -332,6 +355,8 @@ function updateStats() {
         AnimationManager.animateNumber(moneyElement, currentAmount, newAmount);
         AnimationManager.addBounceEffect(moneyElement.parentElement);
     }
+    
+    document.getElementById('scoreCount').textContent = currentScore;
 }
 
 // 開始遊戲

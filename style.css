@@ -253,11 +253,14 @@ body {
     border-radius: 10px;
     border: 1px solid transparent;
     position: relative;
+    padding: 10px 0;
 }
 
 .stat-item {
     font-size: 1.6rem;
     color: #fff;
+    display: flex;
+    align-items: center;
 }
 
 /* 為金額添加特殊樣式 */
@@ -455,7 +458,7 @@ body {
     background: #ff0000 !important;
 }
 
-/* 添���彈出效果的樣式 */
+/* 添彈出效果的樣式 */
 .correct-popup {
     position: fixed;
     top: 50%;
@@ -536,4 +539,13 @@ body {
         transform: scale(0);
         opacity: 0;
     }
+}
+
+/* 添加分數文字樣式 */
+.score-text {
+    font-family: 'Sancreek', cursive;
+    color: #ffaa00;
+    font-weight: bold;
+    font-size: 2rem;
+    margin-left: 10px;
 }
