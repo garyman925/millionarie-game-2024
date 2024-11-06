@@ -93,32 +93,61 @@
             countdown();
         });
 
-        // 載入 sprite 數據
+        // 在 index.html 中添加全局變量來存儲動畫實例
+        let bugAnimation;
+        let bugCorrectAnimation;
+        let bugWrongAnimation;
+
+        // 載入一般動畫
         fetch('images/bug-talking.json')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
-                console.log('Sprite data loaded:', data);
-                // 創建 sprite 動畫並設置特定位置
-                const bugAnimation = new SpriteAnimation('images/bug-talking.png', data, {
+                bugAnimation = new SpriteAnimation('images/bug-talking.png', data, {
                     position: 'absolute',
                     top: '0%',
                     left: '0',
                     width: '450px',
                     height: '100%',
-                    zIndex: '1',
-                    transform: 'translateY(-50%)'  // 垂直居中
+                    zIndex: '1'
                 });
-                // 創建並添加 canvas 到 top-section
                 const topSection = document.querySelector('.top-section');
-                bugAnimation.createCanvas(topSection);
-            })
-            .catch(error => {
-                console.error('Error loading sprite data:', error);
+                bugAnimation.canvas = bugAnimation.createCanvas(topSection);
+            });
+
+        // 載入正確答案動畫
+        fetch('images/bug-correct.json')
+            .then(response => response.json())
+            .then(data => {
+                bugCorrectAnimation = new SpriteAnimation('images/bug-correct.png', data, {
+                    position: 'absolute',
+                    top: '0%',
+                    left: '0',
+                    width: '450px',
+                    height: '100%',
+                    zIndex: '1'
+                });
+                const topSection = document.querySelector('.top-section');
+                bugCorrectAnimation.canvas = bugCorrectAnimation.createCanvas(topSection);
+                // 初始時隱藏正確動畫
+                bugCorrectAnimation.canvas.style.display = 'none';
+            });
+
+        // 載入錯誤答案動畫
+        fetch('images/bug-wrong.json')
+            .then(response => response.json())
+            .then(data => {
+                bugWrongAnimation = new SpriteAnimation('images/bug-wrong.png', data, {
+                    position: 'absolute',
+                    top: '0%',
+                    left: '0',
+                    width: '450px',
+                    height: '100%',
+                    zIndex: '1'
+                });
+                const topSection = document.querySelector('.top-section');
+                bugWrongAnimation.canvas = bugWrongAnimation.createCanvas(topSection);
+                // 初始時隱藏錯誤動畫
+                bugWrongAnimation.canvas.style.display = 'none';
             });
     </script>
     <script src="script.js"></script>

@@ -187,6 +187,20 @@ function checkAnswer(selectedOption) {
         
         // 保持問題框的顯示
         questionBox.style.opacity = '0.3';
+        
+        // 切換到正確動畫
+        if (bugAnimation && bugCorrectAnimation) {
+            bugAnimation.canvas.style.display = 'none';
+            bugCorrectAnimation.canvas.style.display = 'block';
+            bugWrongAnimation.canvas.style.display = 'none';
+            
+            // 3秒後切換回一般動畫
+            setTimeout(() => {
+                bugAnimation.canvas.style.display = 'block';
+                bugCorrectAnimation.canvas.style.display = 'none';
+                bugWrongAnimation.canvas.style.display = 'none';
+            }, 3000);
+        }
     } else {
         SoundManager.playWrong();
         // 標記錯誤選項
@@ -203,6 +217,20 @@ function checkAnswer(selectedOption) {
                 </div>
             </div>
         `;
+        
+        // 切換到錯誤動畫
+        if (bugAnimation && bugWrongAnimation) {
+            bugAnimation.canvas.style.display = 'none';
+            bugCorrectAnimation.canvas.style.display = 'none';
+            bugWrongAnimation.canvas.style.display = 'block';
+            
+            // 3秒後切換回一般動畫
+            setTimeout(() => {
+                bugAnimation.canvas.style.display = 'block';
+                bugCorrectAnimation.canvas.style.display = 'none';
+                bugWrongAnimation.canvas.style.display = 'none';
+            }, 3000);
+        }
     }
     
     currentQuestion++;
