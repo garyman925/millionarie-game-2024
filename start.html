@@ -11,15 +11,19 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background: radial-gradient(#29289d, #060606);
+            background-image: url('images/background.png');
+            background-size: cover;
+            background-position: center;
+            /* background: radial-gradient(#29289d, #060606); */
             font-family: Arial, sans-serif;
             overflow: hidden;
         }
 
         .start-container {
             text-align: center;
-            position: relative;
-            z-index: 1;
+            position: absolute;
+            top: 30%;
+            z-index: 13;
         }
 
         .game-title {
@@ -97,6 +101,7 @@
             100% { transform: rotate(-30deg); }
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tsparticles/confetti@3.0.3/tsparticles.confetti.bundle.min.js"></script>
 </head>
 <body>
     <div class="spotlight spotlight-left"></div>
@@ -109,16 +114,74 @@
 
     <script src="js/howler.min.js"></script>
     <script src="sounds.js"></script>
+    <script src="animations-sprite.js"></script>
     <script>
-        // 頁面加載時播放背景音樂
-        window.addEventListener('load', function() {
+        // 定義黃色 confetti 配置
+        const yellowConfettiConfig = {
+            particleCount: 10,
+            spread: 10,
+            ticks: 10,
+            gravity: 0.3,
+            decay: 0.9,
+            startVelocity: 10,
+            shapes: ["square"],
+            colors: ["#FFD700", "#FFFF00", "#F0E68C", "#DAA520"], // 不同色調的黃色
+            scalar: 3,
+            zIndex: 100,
+            disableForReducedMotion: true
+        };
+
+        // 創建持續的 confetti 效果
+        function createContinuousConfetti() {
+            const interval = setInterval(() => {
+                confetti({
+                    ...yellowConfettiConfig,
+                    origin: { y: -0.1, x: 0.5 }  // 從頂部隨機位置落下
+                });
+            }, 1000);  // 每秒觸發一次
+
+            // 60秒後停止（可以調整）
+            setTimeout(() => clearInterval(interval), 60000);
+        }
+
+        // 等待 DOM 完全加載
+        document.addEventListener('DOMContentLoaded', function() {
+            // 載入 sprite 數據
+            fetch('images/bug-talking.json')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Sprite data loaded:', data);
+                    // 創建 sprite 動畫並設置特定位置
+                    const bugAnimation = new SpriteAnimation('images/bug-talking.png', data, {
+                        position: 'center', // 或者可以是 'custom'
+                        top: '75%',        // 自定義位置
+                        left: '50%',       // 自定義位置
+                        width: '300px',    // 自定義大小
+                        height: 'auto',    // 自定義大小
+                        zIndex: '10'       // 自定義層級
+                    });
+                    // 創建並添加 canvas
+                    bugAnimation.createCanvas(document.body);
+                    
+                    // 開始 confetti 效果
+                    createContinuousConfetti();
+                })
+                .catch(error => {
+                    console.error('Error loading sprite data:', error);
+                });
+
+            // 播放背景音樂
             if (typeof SoundManager !== 'undefined') {
                 SoundManager.playBGM();
             }
         });
 
         function startGame() {
-
             setTimeout(() => {
                 window.location.href = 'index.html';
             }, 1000);
