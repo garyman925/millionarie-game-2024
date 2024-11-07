@@ -459,10 +459,9 @@ function startGame() {
     correctCount = 0;
     wrongCount = 0;
     currentScore = 0;
-    userAnswers = []; // 重置答案記錄
+    userAnswers = [];
     usedHintOnCurrentQuestion = false;
     updateStats();
-    displayQuestion();
     updateMoneyLadder();
     
     // 重置提示按鈕和選項透明度
@@ -495,20 +494,47 @@ function displayQuestion() {
     const activeIndex = ladderItems.length - 1 - currentMoney;
     const currentQuestionMoney = ladderItems[activeIndex].textContent;
     
+    // 先隱藏所有選項
+    const options = document.getElementsByClassName("option");
+    for (let i = 0; i < options.length; i++) {
+        options[i].style.opacity = "0";
+        options[i].disabled = true;
+    }
+    
     // 更新問題顯示，包含獎金金額
-    document.getElementById("question").innerHTML = `
+    const questionElement = document.getElementById("question");
+    questionElement.style.opacity = "0";
+    questionElement.innerHTML = `
         <div style="color: #ffaa00; font-family: 'Sancreek', cursive; font-size: 1.5rem;">
             ${currentQuestionMoney} Question
         </div>
         <div>${question.question}</div>
     `;
-    
-    const options = document.getElementsByClassName("option");
-    for (let i = 0; i < options.length; i++) {
-        options[i].style.opacity = "1";
-        options[i].disabled = false;
-        options[i].textContent = `${String.fromCharCode(65 + i)}: ${question.options[i]}`;
-    }
+
+    // 問題淡入動畫
+    anime({
+        targets: questionElement,
+        opacity: [0, 1],
+        duration: 1000,
+        easing: 'easeInOutQuad',
+        complete: function() {
+            // 問題顯示完成後，依次顯示選項
+            for (let i = 0; i < options.length; i++) {
+                setTimeout(() => {
+                    options[i].textContent = `${String.fromCharCode(65 + i)}: ${question.options[i]}`;
+                    options[i].disabled = false;
+                    
+                    // 選項淡入動畫
+                    anime({
+                        targets: options[i],
+                        opacity: [0, 1],
+                        duration: 500,
+                        easing: 'easeInOutQuad'
+                    });
+                }, i * 500); // 每個選項間隔 500ms
+            }
+        }
+    });
     
     updateStats();
 }

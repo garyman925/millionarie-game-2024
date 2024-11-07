@@ -82,6 +82,12 @@
     <script>
         // 在遊戲頁面加載時先顯示倒數計時
         window.addEventListener('load', function() {
+            // 先隱藏問題和控制區
+            const questionBox = document.querySelector('.question-box');
+            const gameControls = document.querySelector('.game-controls');
+            if (questionBox) questionBox.style.display = 'none';
+            if (gameControls) gameControls.style.display = 'none';
+
             // 創建倒數計時覆蓋層
             const overlay = document.createElement('div');
             overlay.className = 'countdown-overlay';
@@ -101,11 +107,13 @@
                     
                     setTimeout(() => {
                         overlay.remove();
-                        // 監聽開始音效結束事件
-                        SoundManager.sounds.start_bgm.once('end', function() {
-                            // 開始音效結束後播放主背景音樂
-                            SoundManager.playMainBGM();
-                        });
+                        // 顯示問題和控制區
+                        if (questionBox) questionBox.style.display = 'flex';
+                        if (gameControls) gameControls.style.display = 'flex';
+                        // 開始播放主背景音樂
+                        SoundManager.playMainBGM();
+                        // 立即顯示第一個問題
+                        displayQuestion();
                     }, 1000);
                 }
             }
