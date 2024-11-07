@@ -214,7 +214,19 @@ function displayQuestion() {
     }
 
     const question = questions[currentQuestion];
-    document.getElementById("question").textContent = question.question;
+    // 獲取當前 money ladder 的項目
+    const ladderItems = document.getElementById("moneyLadder").getElementsByTagName("li");
+    const currentLadderItem = ladderItems[ladderItems.length - 1 - currentMoney];
+    // 獲取當前問題的獎金金額（從 money ladder 項目的文字中獲取）
+    const currentQuestionMoney = currentLadderItem.textContent;
+    
+    // 更新問題顯示，包含獎金金額
+    document.getElementById("question").innerHTML = `
+        <div style="color: #ffaa00; font-family: 'Sancreek', cursive; font-size: 1.5rem;">
+            ${currentQuestionMoney} Question
+        </div>
+        <div>${question.question}</div>
+    `;
     
     const options = document.getElementsByClassName("option");
     for (let i = 0; i < options.length; i++) {
@@ -249,15 +261,14 @@ function checkAnswer(selectedOption) {
         
         // 計算分數
         if (usedHintOnCurrentQuestion) {
-            currentScore += 990;  // 使用提示後只得到 990 分
+            currentScore += 990;
         } else {
-            currentScore += 1000; // 沒使用提示得到 1000 分
+            currentScore += 1000;
         }
         
-        // 更新分數顯示
         document.getElementById('scoreCount').textContent = currentScore;
         
-        // 創建彈出元素
+        // 創建彈出元素 - 答對
         const popup = document.createElement('div');
         popup.className = 'correct-popup';
         popup.innerHTML = `
@@ -267,68 +278,54 @@ function checkAnswer(selectedOption) {
             </div>
         `;
         
-        // 添加到頁面
         document.body.appendChild(popup);
-        
-        // 2秒後移除彈出元素
-        setTimeout(() => {
-            popup.remove();
-        }, 2000);
-        
-        // 保持問題框的顯示
-        questionBox.style.opacity = '0.3';
         
         // 切換到正確動畫
         if (bugAnimation && bugCorrectAnimation) {
             bugAnimation.canvas.style.display = 'none';
             bugCorrectAnimation.canvas.style.display = 'block';
             bugWrongAnimation.canvas.style.display = 'none';
-            
-            // 3秒後切換回一般動畫
-            setTimeout(() => {
-                bugAnimation.canvas.style.display = 'block';
-                bugCorrectAnimation.canvas.style.display = 'none';
-                bugWrongAnimation.canvas.style.display = 'none';
-            }, 3000);
         }
         showDialogue('correct');
     } else {
         SoundManager.playWrong();
-        // 標記錯誤選項
         options[selectedOption].classList.add('wrong-answer');
         wrongCount++;
         currentMoney = 0;
         updateMoneyLadder();
         
-        questionBox.innerHTML = `
-            <div style="color: #ff0000; font-size: 2.5rem; text-align: center;">
-                Wrong!
-                <div style="font-size: 1.5rem; margin-top: 10px;">
-                    Correct answer: ${question.options[question.correct]}
-                </div>
+        // 創建彈出元素 - 答錯
+        const popup = document.createElement('div');
+        popup.className = 'correct-popup';
+        popup.innerHTML = `
+            <h1 class="correct-text" style="color: #ff0000;">WRONG ANSWER!</h1>
+            <div style="color: #ff0000; font-size: 1.5rem; margin-top: 20px;">
+                The correct answer is: ${question.options[question.correct]}
             </div>
         `;
+        
+        document.body.appendChild(popup);
         
         // 切換到錯誤動畫
         if (bugAnimation && bugWrongAnimation) {
             bugAnimation.canvas.style.display = 'none';
             bugCorrectAnimation.canvas.style.display = 'none';
             bugWrongAnimation.canvas.style.display = 'block';
-            
-            // 3秒後切換回一般動畫
-            setTimeout(() => {
-                bugAnimation.canvas.style.display = 'block';
-                bugCorrectAnimation.canvas.style.display = 'none';
-                bugWrongAnimation.canvas.style.display = 'none';
-            }, 3000);
         }
         showDialogue('wrong');
     }
+    
+    // 使問題框變暗
+    questionBox.style.opacity = '0.3';
     
     currentQuestion++;
     updateStats();
     
     setTimeout(() => {
+        // 移除彈出元素
+        const popup = document.querySelector('.correct-popup');
+        if (popup) popup.remove();
+        
         // 重置所有按鈕的樣式
         for (let i = 0; i < options.length; i++) {
             options[i].disabled = false;
@@ -337,6 +334,13 @@ function checkAnswer(selectedOption) {
         
         // 恢復問題框的透明度
         questionBox.style.opacity = '1';
+        
+        // 切換回正常動畫
+        if (bugAnimation) {
+            bugAnimation.canvas.style.display = 'block';
+            if (bugCorrectAnimation) bugCorrectAnimation.canvas.style.display = 'none';
+            if (bugWrongAnimation) bugWrongAnimation.canvas.style.display = 'none';
+        }
         
         if (currentQuestion < questions.length) {
             displayQuestion();

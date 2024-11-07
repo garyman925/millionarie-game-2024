@@ -50,7 +50,6 @@ body {
 
 .question-box {
     display: flex;
-    justify-content: center;
     flex: 2;
     background-color: rgb(18 5 58 / 90%);
     border: none;
@@ -65,7 +64,7 @@ body {
     z-index: 2;
 }
 
-    .question-box>p{ margin: auto; }
+    .question-box>p{ margin: 0; }
 
 .money-ladder {
     flex: 1;
