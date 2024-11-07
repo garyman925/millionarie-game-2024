@@ -2,6 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="description" content="Who Wants to Be a Millionaire Quiz Game">
     <title>Who Wants to Be a Millionaire</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
@@ -20,38 +25,49 @@
             <div class="stat-item">Wrong: <span id="wrongCount">0</span></div>
             <div class="stat-item">$<span id="totalMoney">0</span></div>
         </div>
-        <div class="top-section">
-            <div class="question-box">
-                <p id="question">Question will appear here</p>
+        
+        <div class="game-content">
+            <div class="left-content">
+                <div class="top-section">
+                    <div class="bubble-box" id="bubbleBox">
+                        <div class="bubble-content">Welcome to the game!</div>
+                    </div>
+                    <div class="question-box">
+                        <p id="question">Question will appear here</p>
+                    </div>
+                </div>
+                <div class="game-controls">
+                    <div class="options-container">
+                        <button class="option" onclick="checkAnswer(0)">A: </button>
+                        <button class="option" onclick="checkAnswer(1)">B: </button>
+                        <button class="option" onclick="checkAnswer(2)">C: </button>
+                        <button class="option" onclick="checkAnswer(3)">D: </button>
+                    </div>
+                    <div class="hints-container">
+                        <button class="hint-btn" onclick="showHint(0)">50:50</button>
+                        <button class="hint-btn" onclick="showHint(1)">50:50</button>
+                    </div>
+                </div>
             </div>
-            <div class="money-ladder">
-                <ul id="moneyLadder">
-                    <li>$1,000,000</li>
-                    <li>$500,000</li>
-                    <li>$250,000</li>
-                    <li>$100,000</li>
-                    <li>$50,000</li>
-                    <li>$25,000</li>
-                    <li>$15,000</li>
-                    <li>$10,000</li>
-                    <li>$7,500</li>
-                    <li>$5,000</li>
-                    <li>$2,500</li>
-                    <li>$1,500</li>
-                    <li>$1,000</li>
-                </ul>
-            </div>
-        </div>
-        <div class="game-controls">
-            <div class="options-container">
-                <button class="option" onclick="checkAnswer(0)">A: </button>
-                <button class="option" onclick="checkAnswer(1)">B: </button>
-                <button class="option" onclick="checkAnswer(2)">C: </button>
-                <button class="option" onclick="checkAnswer(3)">D: </button>
-            </div>
-            <div class="hints-container">
-                <button class="hint-btn" onclick="showHint(0)">50:50</button>
-                <button class="hint-btn" onclick="showHint(1)">50:50</button>
+            <div class="right-content">
+                
+                <div class="money-ladder">
+                    <ul id="moneyLadder">
+                        <li>$1,000,000</li>
+                        <li>$500,000</li>
+                        <li>$250,000</li>
+                        <li>$100,000</li>
+                        <li>$50,000</li>
+                        <li>$25,000</li>
+                        <li>$15,000</li>
+                        <li>$10,000</li>
+                        <li>$7,500</li>
+                        <li>$5,000</li>
+                        <li>$2,500</li>
+                        <li>$1,500</li>
+                        <li>$1,000</li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
@@ -105,7 +121,7 @@
                     position: 'absolute',
                     top: '0%',
                     left: '0',
-                    width: '450px',
+                    width: 'auto',
                     height: '100%',
                     zIndex: '1'
                 });
@@ -121,7 +137,7 @@
                     position: 'absolute',
                     top: '0%',
                     left: '0',
-                    width: '450px',
+                    width: 'auto',
                     height: '100%',
                     zIndex: '1'
                 });
@@ -139,7 +155,7 @@
                     position: 'absolute',
                     top: '0%',
                     left: '0',
-                    width: '450px',
+                    width: 'auto',
                     height: '100%',
                     zIndex: '1'
                 });

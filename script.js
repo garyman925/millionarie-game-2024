@@ -97,8 +97,59 @@ let usedHints = new Set();
 let currentScore = 0;
 let usedHintOnCurrentQuestion = false;
 
+// 添加對話內容
+const dialogues = {
+    welcome: "Welcome! Let's see if you can become a millionaire!",
+    correct: [
+        "Excellent! Keep going!",
+        "You're doing great!",
+        "That's the right answer!",
+        "Perfect! You're on fire!"
+    ],
+    wrong: [
+        "Oops! That's not correct...",
+        "Don't worry, try again!",
+        "Better luck next time!"
+    ],
+    hint: "Using a hint? Choose wisely!",
+    finalQuestion: "This is the million dollar question!",
+    gameOver: "Congratulations on completing the game!"
+};
+
+// 顯示對話的函數
+function showDialogue(type, index = null) {
+    const bubbleBox = document.getElementById('bubbleBox');
+    let message;
+
+    if (Array.isArray(dialogues[type])) {
+        // 如果是數組，隨機選擇一條消息
+        const randomIndex = Math.floor(Math.random() * dialogues[type].length);
+        message = dialogues[type][randomIndex];
+    } else {
+        message = dialogues[type];
+    }
+
+    bubbleBox.querySelector('.bubble-content').textContent = message;
+    bubbleBox.classList.add('show');
+
+    // 3秒後隱藏對話框
+    setTimeout(() => {
+        bubbleBox.classList.remove('show');
+    }, 3000);
+}
+
+// 在不同情況下調用對話顯示
+// 在遊戲開始時
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        showDialogue('welcome');
+    }, 4000); // 等待倒計時結束後顯示
+});
+
 function showHint(hintIndex) {
     if (usedHints.has(hintIndex)) return;
+    
+    showDialogue('hint');
     
     // 標記當前問題使用了提示
     usedHintOnCurrentQuestion = true;
@@ -240,6 +291,7 @@ function checkAnswer(selectedOption) {
                 bugWrongAnimation.canvas.style.display = 'none';
             }, 3000);
         }
+        showDialogue('correct');
     } else {
         SoundManager.playWrong();
         // 標記錯誤選項
@@ -270,6 +322,7 @@ function checkAnswer(selectedOption) {
                 bugWrongAnimation.canvas.style.display = 'none';
             }, 3000);
         }
+        showDialogue('wrong');
     }
     
     currentQuestion++;
