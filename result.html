@@ -30,8 +30,6 @@
 
         .final-score {
             text-align: center;
-            margin-bottom: 40px;
-            padding-top: 40px;
         }
           .final-score .stats{
                 display: flex;
@@ -190,16 +188,26 @@
                 document.getElementById('wrongCount').textContent = gameData.wrong;
                 document.getElementById('totalQuestions').textContent = gameData.questions.length;
 
-                // 顯示所有問題和答案
+                // 修改顯示問題和答案的部分
                 const reviewContainer = document.getElementById('questionReview');
                 gameData.questions.forEach((q, index) => {
                     const questionDiv = document.createElement('div');
                     questionDiv.className = 'question-item';
+                    
+                    // 判斷是否答對
+                    const isCorrect = q.userAnswer === q.correct;
+                    
                     questionDiv.innerHTML = `
                         <div class="question-text">Question ${index + 1}: ${q.question}</div>
-                        <div class="answer ${q.userAnswer === q.correct ? 'correct-answer' : 'wrong-answer'}">
-                            Your answer: ${q.options[q.userAnswer]}
-                            ${q.userAnswer !== q.correct ? `<br>Correct answer: ${q.options[q.correct]}` : ''}
+                        <div class="answers-container">
+                            <div class="answer ${isCorrect ? 'correct-answer' : 'wrong-answer'}">
+                                Your answer: ${q.options[q.userAnswer]}
+                            </div>
+                            ${!isCorrect ? `
+                                <div class="answer correct-answer">
+                                    Correct answer: ${q.options[q.correct]}
+                                </div>
+                            ` : ''}
                         </div>
                     `;
                     reviewContainer.appendChild(questionDiv);

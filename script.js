@@ -179,66 +179,13 @@ function showHint(hintIndex) {
     });
 }
 
-function startGame() {
-    currentQuestion = 0;
-    currentMoney = 0;
-    correctCount = 0;
-    wrongCount = 0;
-    currentScore = 0;  // 重置分數
-    usedHintOnCurrentQuestion = false;
-    updateStats();
-    displayQuestion();
-    updateMoneyLadder();
-    
-    // 重置提示按鈕和選項透明度
-    usedHints.clear();
-    const options = document.getElementsByClassName('option');
-    const hintBtns = document.getElementsByClassName('hint-btn');
-    
-    // 重置所有按鈕狀態
-    for (let btn of hintBtns) {
-        btn.disabled = false;
-    }
-    
-    for (let option of options) {
-        option.style.opacity = "1";
-        option.disabled = false;
-    }
-}
-
-function displayQuestion() {
-    if (currentQuestion >= questions.length) {
-        alert("恭喜你！你贏得了遊戲！");
-        startGame();
-        return;
-    }
-
-    const question = questions[currentQuestion];
-    // 獲取當前 money ladder 的項目
-    const ladderItems = document.getElementById("moneyLadder").getElementsByTagName("li");
-    const currentLadderItem = ladderItems[ladderItems.length - 1 - currentMoney];
-    // 獲取當前問題的獎金金額（從 money ladder 項目的文字中獲取）
-    const currentQuestionMoney = currentLadderItem.textContent;
-    
-    // 更新問題顯示，包含獎金金額
-    document.getElementById("question").innerHTML = `
-        <div style="color: #ffaa00; font-family: 'Sancreek', cursive; font-size: 1.5rem;">
-            ${currentQuestionMoney} Question
-        </div>
-        <div>${question.question}</div>
-    `;
-    
-    const options = document.getElementsByClassName("option");
-    for (let i = 0; i < options.length; i++) {
-        options[i].style.opacity = "1";
-        options[i].disabled = false;
-        options[i].textContent = `${String.fromCharCode(65 + i)}: ${question.options[i]}`;
-    }
-    
-    updateStats();
-}
+// 添加一個數組來記錄用戶的答案
+let userAnswers = [];
 
 function checkAnswer(selectedOption) {
+    // 記錄用戶的答案
+    userAnswers[currentQuestion] = selectedOption;
+    
     const question = questions[currentQuestion];
     
     // 禁用所有選項按鈕
@@ -348,15 +295,14 @@ function checkAnswer(selectedOption) {
             // 保存遊戲結果
             const gameResults = {
                 money: moneyLadder[currentMoney - 1] || 0,
-                score: currentScore, // 添加分數
+                score: currentScore,
                 correct: correctCount,
                 wrong: wrongCount,
-                questions: questions.map((q, index) => ({
-                    ...q,
-                    userAnswer: index < currentQuestion ? (
-                        options[index].classList.contains('correct-answer') ? q.correct : 
-                        options[index].classList.contains('wrong-answer') ? index : q.correct
-                    ) : null
+                questions: questions.map((q, i) => ({
+                    question: q.question,
+                    options: q.options,
+                    correct: q.correct,
+                    userAnswer: userAnswers[i] // 使用記錄的答案
                 }))
             };
             localStorage.setItem('gameResults', JSON.stringify(gameResults));
@@ -505,3 +451,64 @@ document.querySelectorAll('.option').forEach(button => {
         SoundManager.playSelect();
     });
 });
+
+// 在 startGame 函數中重置答案記錄
+function startGame() {
+    currentQuestion = 0;
+    currentMoney = 0;
+    correctCount = 0;
+    wrongCount = 0;
+    currentScore = 0;
+    userAnswers = []; // 重置答案記錄
+    usedHintOnCurrentQuestion = false;
+    updateStats();
+    displayQuestion();
+    updateMoneyLadder();
+    
+    // 重置提示按鈕和選項透明度
+    usedHints.clear();
+    const options = document.getElementsByClassName('option');
+    const hintBtns = document.getElementsByClassName('hint-btn');
+    
+    // 重置所有按鈕狀態
+    for (let btn of hintBtns) {
+        btn.disabled = false;
+    }
+    
+    for (let option of options) {
+        option.style.opacity = "1";
+        option.disabled = false;
+    }
+}
+
+function displayQuestion() {
+    if (currentQuestion >= questions.length) {
+        alert("恭喜你！你贏得了遊戲！");
+        startGame();
+        return;
+    }
+
+    const question = questions[currentQuestion];
+    
+    // 獲取 money ladder 的當前高亮位置的金額
+    const ladderItems = document.getElementById("moneyLadder").getElementsByTagName("li");
+    const activeIndex = ladderItems.length - 1 - currentMoney;
+    const currentQuestionMoney = ladderItems[activeIndex].textContent;
+    
+    // 更新問題顯示，包含獎金金額
+    document.getElementById("question").innerHTML = `
+        <div style="color: #ffaa00; font-family: 'Sancreek', cursive; font-size: 1.5rem;">
+            ${currentQuestionMoney} Question
+        </div>
+        <div>${question.question}</div>
+    `;
+    
+    const options = document.getElementsByClassName("option");
+    for (let i = 0; i < options.length; i++) {
+        options[i].style.opacity = "1";
+        options[i].disabled = false;
+        options[i].textContent = `${String.fromCharCode(65 + i)}: ${question.options[i]}`;
+    }
+    
+    updateStats();
+}
