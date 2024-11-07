@@ -9,6 +9,7 @@
     <meta name="description" content="Who Wants to Be a Millionaire Quiz Game Results">
     <title>Game Results - Who Wants to Be a Millionaire</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@tsparticles/confetti@3.0.3/tsparticles.confetti.bundle.min.js"></script>
     <style>
         body {
             position: relative;
@@ -142,6 +143,99 @@
             pointer-events: none;
             z-index: 1;
         }
+
+        /* 添加勝利畫面的樣式 */
+        .victory-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .victory-content {
+            text-align: center;
+            animation: scaleIn 1s ease-out;
+        }
+
+        .victory-text {
+            font-family: 'Sancreek', cursive;
+            font-size: 6rem;
+            color: #FFD700;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+            margin: 0;
+            animation: glowText 2s infinite;
+        }
+
+        .victory-subtext {
+            font-family: 'Sancreek', cursive;
+            font-size: 3rem;
+            margin: 0;
+            color: #FFA500;
+            animation: glowText 2s infinite 0.5s;
+        }
+
+        .money-amount {
+            font-family: 'Sancreek', cursive;
+            font-size: 5rem;
+            color: #00FF00;
+            animation: glowText 2s infinite 1s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes glowText {
+            0% { text-shadow: 0 0 20px currentColor; }
+            50% { text-shadow: 0 0 40px currentColor; }
+            100% { text-shadow: 0 0 20px currentColor; }
+        }
+
+        /* 添加關閉按鈕樣式 */
+        .close-victory {
+            position: relative;
+            top: 20px;
+            right: 20px;
+            border: none;
+            color: #FFD700;
+            background: #9C27B0;
+            border-radius: 10px;
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 10px 30px;
+            transition: all 0.3s;
+        }
+
+        .close-victory:hover {
+            transform: scale(1.2);
+            color: #FFA500;
+        }
+
+        /* 添加淡出動畫 */
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
     </style>
 </head>
 <body>
@@ -240,6 +334,47 @@
                     `;
                     reviewContainer.appendChild(questionDiv);
                 });
+
+                // 檢查是否答對所有問題
+                const isAllCorrect = gameData.correct === 13;
+                
+                if (isAllCorrect) {
+                    // 先開始 confetti 效果
+                    const interval = setInterval(() => {
+                        confetti({
+                            particleCount: 100,
+                            spread: 70,
+                            origin: { y: 0.6 },
+                            gravity: 0.8,
+                            ticks: 300,
+                            startVelocity: 30,
+                            shapes: ["circle"],
+                            colors: ["#FFD700", "#FFFF00", "#F0E68C", "#DAA520"],
+                            scalar: 1.2,
+                            zIndex: 100,
+                            angle: 90,
+                            drift: 1
+                        });
+                    }, 1000);
+
+                    // 3秒後顯示勝利畫面
+                    setTimeout(() => {
+                        const victoryOverlay = document.createElement('div');
+                        victoryOverlay.className = 'victory-overlay';
+                        victoryOverlay.innerHTML = `
+                            <div class="victory-content">
+                                <button class="close-victory" onclick="closeVictoryScreen()">&times;</button>
+                                <h1 class="victory-text">CONGRATULATIONS!</h1>
+                                <h2 class="victory-subtext">You Are A Millionaire!</h2>
+                                <div class="money-amount">$1,000,000</div>
+                            </div>
+                        `;
+                        document.body.appendChild(victoryOverlay);
+                    }, 3000);
+
+                    // 60秒後停止 confetti
+                    setTimeout(() => clearInterval(interval), 60000);
+                }
             }
         });
 
@@ -248,6 +383,83 @@
             SoundManager.sounds.final_bgm.stop();
             window.location.href = 'index.html';
         }
+
+        // 添加一個變量來存儲 confetti 的 interval ID
+        let confettiInterval;
+
+        // 修改 showVictoryScreen 函數
+        function showVictoryScreen() {
+            // 停止 final_bgm
+            SoundManager.sounds.final_bgm.stop();
+            // 播放 hero_bgm
+            SoundManager.sounds.hero_bgm.play();
+
+            // 先開始 confetti 效果
+            confettiInterval = setInterval(() => {
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0 },
+                    gravity: 0.8,
+                    ticks: 300,
+                    startVelocity: 30,
+                    shapes: ["square"],
+                    colors: ["#FFD700", "#FFFF00", "#F0E68C", "#DAA520"],
+                    scalar: 3,
+                    zIndex: 1100,
+                    angle: 90,
+                    drift: 1
+                });
+            }, 1000);
+
+            // 2秒後顯示勝利畫面
+            setTimeout(() => {
+                const victoryOverlay = document.createElement('div');
+                victoryOverlay.className = 'victory-overlay';
+                victoryOverlay.style.zIndex = '1000';
+                victoryOverlay.innerHTML = `
+                    <div class="victory-content">
+                        <h1 class="victory-text">CONGRATULATIONS!</h1>
+                        <h2 class="victory-subtext">You Are A Millionaire!</h2>
+                        <div class="money-amount">$1,000,000</div>
+                        <button class="close-victory" onclick="closeVictoryScreen()">Close</button>
+                    </div>
+                `;
+                document.body.appendChild(victoryOverlay);
+            }, 2000);
+        }
+
+        // 修改關閉勝利畫面的函數
+        function closeVictoryScreen() {
+            const victoryOverlay = document.querySelector('.victory-overlay');
+            if (victoryOverlay) {
+                victoryOverlay.style.animation = 'fadeOut 0.5s ease-out';
+                setTimeout(() => {
+                    victoryOverlay.remove();
+                    // 停止 hero_bgm
+                    SoundManager.sounds.hero_bgm.stop();
+                    // 恢復播放 final_bgm
+                    SoundManager.sounds.final_bgm.play();
+                }, 500);
+            }
+            
+            // 清除 confetti interval
+            if (confettiInterval) {
+                clearInterval(confettiInterval);
+                confettiInterval = null;
+            }
+            
+            // 清除所有剩餘的 confetti
+            confetti.reset();
+        }
+
+        // 添加鍵盤事件監聽器
+        document.addEventListener('keydown', function(event) {
+            // 按 'V' 鍵顯示勝利畫面
+            if (event.key === 'v' || event.key === 'V') {
+                showVictoryScreen();
+            }
+        });
     </script>
 </body>
 </html> 

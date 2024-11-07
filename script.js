@@ -525,3 +525,47 @@ function displayQuestion() {
     
     updateStats();
 }
+
+// 在 script.js 中添加測試函數
+function showVictoryScreen() {
+    // 創建特殊的勝利畫面
+    const victoryOverlay = document.createElement('div');
+    victoryOverlay.className = 'victory-overlay';
+    victoryOverlay.innerHTML = `
+        <div class="victory-content">
+            <h1 class="victory-text">CONGRATULATIONS!</h1>
+            <h2 class="victory-subtext">You Are A Millionaire!</h2>
+            <div class="money-amount">$1,000,000</div>
+        </div>
+    `;
+    document.body.appendChild(victoryOverlay);
+
+    // 添加持續的金色 confetti 效果
+    const interval = setInterval(() => {
+        confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 },
+            gravity: 0.8,
+            ticks: 300,
+            startVelocity: 30,
+            shapes: ["circle"],
+            colors: ["#FFD700", "#FFFF00", "#F0E68C", "#DAA520"],
+            scalar: 1.2,
+            zIndex: 100,
+            angle: 90,
+            drift: 1
+        });
+    }, 1000);
+
+    // 60秒後停止 confetti
+    setTimeout(() => clearInterval(interval), 60000);
+}
+
+// 添加鍵盤事件監聽器
+document.addEventListener('keydown', function(event) {
+    // 按 'V' 鍵顯示勝利畫面
+    if (event.key === 'v' || event.key === 'V') {
+        showVictoryScreen();
+    }
+});
