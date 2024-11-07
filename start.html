@@ -283,34 +283,44 @@
     <script>
         // 定義黃色 confetti 配置
         const yellowConfettiConfig = {
-            particleCount: 10,
-            spread: 10,
-            ticks: 10,
-            gravity: 1,
-            decay: 0.9,
-            startVelocity: 10,
-            shapes: ["circle"],
-            colors: ["#FFD700", "#FFFF00", "#F0E68C", "#DAA520"], // 不同色調的黃色
-            scalar: 3,
-            zIndex: 1,
-            disableForReducedMotion: true
+            particleCount: 50,
+                spread: 150,
+                origin: { x: 0.6, y: 0 },
+                gravity: 3,
+                ticks: 100,
+                startVelocity: 150,
+                shapes: ["square"],
+                colors: ["#FFD700", "#DAA520", "#B8860B", "#FFA500", "#F0E68C"],
+                scalar: 3,
+                zIndex: 100,
+                angle: 95
         };
 
         // 創建持續的 confetti 效果
         function createContinuousConfetti() {
             const interval = setInterval(() => {
+                // 中間主要落下
+            
+
+                // 左右兩側輔助效果
                 confetti({
                     ...yellowConfettiConfig,
-                    origin: { y: -0.1, x: 0.5 }  // 從頂部隨機位置落下
+                    particleCount: 100,
+                    origin: { y: 0, x: 0.4 },
+                    angle: 85
                 });
+             
             }, 1000);  // 每秒觸發一次
 
-            // 60秒後停止（可以調整）
+            // 60秒後停止
             setTimeout(() => clearInterval(interval), 60000);
         }
 
         // 等待 DOM 加載完成
         document.addEventListener('DOMContentLoaded', function() {
+            // 立即開始 confetti 效果
+            createContinuousConfetti();
+
             // 載入 sprite 數據
             fetch('images/bug-talking.json')
                 .then(response => {
@@ -321,7 +331,7 @@
                 })
                 .then(data => {
                     console.log('Sprite data loaded:', data);
-                    // 創建 sprite 動畫並設置��定位置
+                    // 創建 sprite 動畫並設置定位置
                     const bugAnimation = new SpriteAnimation('images/bug-talking.png', data, {
                         position: 'absolute',
                         top: '200px',        // 改為 auto

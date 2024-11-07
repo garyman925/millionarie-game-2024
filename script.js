@@ -42,23 +42,58 @@ function showConfetti() {
     }, 1000);
 }
 
-const questions = [
-    {
-        question: "Which is the largest planet in our solar system?",
-        options: ["Jupiter", "Saturn", "Uranus", "Neptune"],
-        correct: 0
-    },
-    {
-        question: "How long is the Great Wall of China?",
-        options: ["5,000 km", "6,000 km", "7,000 km", "8,000 km"],
-        correct: 2
-    },
-    {
-        question: "What is Earth's axis?",
-        options: ["North Pole", "South Pole", "Equator", "Earth's Core"],
-        correct: 1
-    }
-];
+// 修改問題加載函數
+function loadQuestions() {
+    fetch('questions.json')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to load questions');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (!data || !data.questions || !Array.isArray(data.questions)) {
+                throw new Error('Invalid question data format');
+            }
+            questions = data.questions;
+            startGame();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            // 顯示錯誤信息給玩家
+            const errorMessage = document.createElement('div');
+            errorMessage.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: rgba(255, 0, 0, 0.9);
+                color: white;
+                padding: 20px;
+                border-radius: 10px;
+                font-size: 1.5rem;
+                text-align: center;
+                z-index: 1000;
+            `;
+            errorMessage.innerHTML = `
+                <h2>Error Loading Questions</h2>
+                <p>Unable to load the game questions. Please try again later.</p>
+                <button onclick="location.reload()" style="
+                    padding: 10px 20px;
+                    margin-top: 10px;
+                    background: white;
+                    color: black;
+                    border: none;
+                    border-radius: 5px;
+                    cursor: pointer;
+                ">Retry</button>
+            `;
+            document.body.appendChild(errorMessage);
+        });
+}
+
+// 在頁面加載時調用
+window.addEventListener('load', loadQuestions);
 
 let currentQuestion = 0;
 let currentMoney = 0;
@@ -201,7 +236,7 @@ function checkAnswer(selectedOption) {
     
     if (selectedOption === question.correct) {
         SoundManager.playCorrect();
-        showConfetti();
+        AnimationModule.showConfetti();
         correctCount++;
         currentMoney++;
         updateMoneyLadder();
@@ -355,8 +390,8 @@ function updateStats() {
     // 如果金額有變化，使用動畫
     if (newAmount > currentAmount) {
         const moneyElement = document.getElementById('totalMoney');
-        AnimationManager.animateNumber(moneyElement, currentAmount, newAmount);
-        AnimationManager.addBounceEffect(moneyElement.parentElement);
+        AnimationModule.animateNumber(moneyElement, currentAmount, newAmount);
+        AnimationModule.addBounceEffect(moneyElement.parentElement);
     }
     
     document.getElementById('scoreCount').textContent = currentScore;
@@ -365,39 +400,12 @@ function updateStats() {
 // 開始遊戲
 startGame();
 
-// 在文件開頭添加 debug 模式變量
-let debugMode = false;
-
 // 添加鍵盤事件監聽器
 document.addEventListener('keydown', function(event) {
-    // 按下 'D' 鍵切換 debug 模式
-    if (event.key === 'd' || event.key === 'D') {
-        debugMode = !debugMode;
-        const question = questions[currentQuestion];
-        if (debugMode) {
-            console.log(`Debug Mode ON`);
-            console.log(`Current Question: ${currentQuestion + 1}`);
-            console.log(`Correct Answer: ${String.fromCharCode(65 + question.correct)} (${question.options[question.correct]})`);
-            
-            // 在問題框中顯示正確答案
-            const questionBox = document.getElementById('question');
-            const originalText = questionBox.textContent;
-            questionBox.innerHTML = `
-                <div style="color: yellow; font-size: 1.2rem; margin-bottom: 10px;">
-                    Debug: Correct Answer is ${String.fromCharCode(65 + question.correct)}
-                </div>
-                ${originalText}
-            `;
-        } else {
-            console.log('Debug Mode OFF');
-            displayQuestion(); // 重新顯示問題，移除 debug 息
-        }
-    }
-    
     // 修改 'C' 鍵的測試部分
     if (event.key === 'c' || event.key === 'C') {
         const question = questions[currentQuestion];
-        showConfetti();
+        AnimationModule.showConfetti();
         
         // 創建彈出元素
         const popup = document.createElement('div');
@@ -422,26 +430,6 @@ document.addEventListener('keydown', function(event) {
             questionBox.style.opacity = '1';
             displayQuestion();
         }, 2000);
-    }
-
-    // 添加 'R' 鍵來測試結果頁面
-    if (event.key === 'r' || event.key === 'R') {
-        // 創建測試用的遊戲結果數據
-        const testResults = {
-            money: 100000,
-            correct: 2,
-            wrong: 1,
-            questions: questions.map((q, index) => ({
-                ...q,
-                userAnswer: index % 2 === 0 ? q.correct : (q.correct + 1) % 4 // 模擬一些答對一些答錯
-            }))
-        };
-        
-        // 保存測試數據到 localStorage
-        localStorage.setItem('gameResults', JSON.stringify(testResults));
-        
-        // 跳轉到結果頁面
-        window.location.href = 'result.html';
     }
 }); 
 
@@ -482,7 +470,6 @@ function startGame() {
 
 function displayQuestion() {
     if (currentQuestion >= questions.length) {
-        alert("恭喜你！你贏得了遊戲！");
         startGame();
         return;
     }

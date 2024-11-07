@@ -31,6 +31,10 @@ const SoundManager = {
         final_bgm: new Howl({
             src: ['sounds/final-answer.mp3'],
             volume: 0.8
+        }),
+        select: new Howl({
+            src: ['sounds/select.mp3'],
+            volume: 0.5
         })
     },
 
@@ -63,6 +67,9 @@ const SoundManager = {
     },
     playFinalBGM: function() {
         this.sounds.final_bgm.play();
+    },
+    playSelect: function() {
+        this.sounds.select.play();
     },
 
     // 全局音量控制

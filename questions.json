@@ -1,0 +1,14 @@
+{
+    "questions": [
+        {
+            "question": "What is the largest planet in our solar system?",
+            "options": ["Mars", "Saturn", "Jupiter", "Neptune"],
+            "correct": 2
+        },
+        {
+            "question": "Which planet is known as the Red Planet?",
+            "options": ["Venus", "Mars", "Mercury", "Uranus"],
+            "correct": 1
+        }
+    ]
+}
