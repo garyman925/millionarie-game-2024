@@ -23,6 +23,7 @@ body {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0% 3%;
+    height: 100%;
 }
 
 .top-section {
@@ -261,13 +262,6 @@ body {
     align-items: center;
 }
 
-/* 為金額添加特殊樣式 */
-.stat-item:last-child {
-    font-family: 'Sancreek', cursive;
-    position: relative;
-    margin-left: auto;
-    font-size: 4rem;
-}
 
 #totalMoney {
     font-family: 'Sancreek', cursive;
@@ -616,20 +610,14 @@ body {
         padding: 20px 15px;
     }
 
-    /* 調整其他元素的響應式布局 */
 
-    .question-box {
-        margin: 0;
-        font-size: 1.5rem;
-        text-align: center;
-    }
 
     .money-ladder {
         width: 100%;
     }
 
     .money-ladder li {
-        font-size: 1rem;
+        font-size: 1.6rem;
         text-align: center;
     }
 
@@ -647,10 +635,6 @@ body {
 
     .stat-item {
         font-size: 1.2rem;
-    }
-
-    .stat-item:last-child {
-        font-size: 2.5rem;
     }
 
     /* 調整氣泡對話框的位置 */
@@ -680,4 +664,18 @@ body {
 
 .game-content .right-content {
     flex: 3;
-}   
+}
+
+.right-content .money-display {
+    font-family: 'Sancreek', cursive;
+    font-size: 4rem;
+    color: #fff;
+    text-shadow: 0 0 10px rgba(255, 170, 0, 0.3);
+}
+
+.right-content #totalMoney {
+    font-family: inherit;
+    color: inherit;
+    font-weight: bold;
+    color: #ffaa00;
+}
