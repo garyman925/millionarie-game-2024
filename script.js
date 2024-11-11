@@ -117,14 +117,6 @@ const moneyLadder = [
     1000000
 ];
 
-// 添加提示數
-const hints = [
-    ["This planet has a big red spot", "It's a gas giant", "Largest by mass and volume"],
-    ["Hint A", "Hint B", "Hint C"],
-    ["Hint 1", "Hint 2", "Hint 3"]
-    // 為每個問題添加對應的提示...
-];
-
 // 記錄已使用的提示按鈕
 let usedHints = new Set();
 
@@ -376,10 +368,10 @@ function updateMoneyLadder() {
     }
 }
 
-// 添加更新統計的函數
+// 修改 updateStats 函數
 function updateStats() {
     document.getElementById('questionCount').textContent = currentQuestion;
-    document.getElementById('totalQuestions').textContent = questions.length;
+    document.getElementById('totalQuestions').textContent = '13';  // 更新為 13 題
     document.getElementById('correctCount').textContent = correctCount;
     document.getElementById('wrongCount').textContent = wrongCount;
     
