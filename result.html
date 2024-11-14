@@ -49,13 +49,20 @@
         .final-results-item{
             display: flex;
             justify-content: center;
-            gap: 40px;
+            gap: 50px;
+            flex-wrap: wrap;
+            padding: 20px;
+        }
+
+        .final-results-item > div {
+            text-align: center;
+            min-width: 250px;
         }
 
         .money-earned, .score-earned {
             font-family: 'Sancreek', cursive;
-            font-size: 5rem;
-            text-shadow: 0 0 20px rgba(255, 170, 0, 0.5);
+            font-size: 3rem;
+            margin: 10px 0;
         }
 
         .money-earned {
@@ -79,7 +86,7 @@
         }
 
         .question-item {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgb(54 55 67 / 70%);
             padding: 20px;
             margin-bottom: 20px;
             border-radius: 10px;
@@ -213,8 +220,6 @@
         /* 添加關閉按鈕樣式 */
         .close-victory {
             position: relative;
-            top: 20px;
-            right: 20px;
             border: none;
             color: #FFD700;
             background: #9C27B0;
@@ -235,6 +240,62 @@
         @keyframes fadeOut {
             from { opacity: 1; }
             to { opacity: 0; }
+        }
+
+        .question-review{
+            height: 500px;
+            overflow-y: auto;
+        }
+
+        /* 添加響應式設計 */
+        @media screen and (max-width: 768px) {
+            .final-results-item {
+                gap: 30px;
+                padding: 10px;
+            }
+
+            .final-results-item > div {
+                min-width: 200px;
+            }
+
+            .result-label {
+                font-size: 1.2rem;
+            }
+
+            .money-earned, .score-earned {
+                font-size: 2.5rem;
+            }
+        }
+
+        /* 更小的螢幕 */
+        @media screen and (max-width: 480px) {
+            .final-results-item {
+                gap: 0px;
+                flex-direction: column;
+            }
+
+            .final-results-item > div {
+                min-width: 150px;
+            }
+
+            .result-label {
+                font-size: 2rem;
+                margin: 0;
+            }
+
+            .money-earned, .score-earned {
+                font-size: 4rem;
+                margin: 0;
+            }
+
+            .final-score .stats{
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .victory-text{
+                font-size: 3rem;
+            }
         }
     </style>
 </head>
@@ -363,10 +424,10 @@
                         victoryOverlay.className = 'victory-overlay';
                         victoryOverlay.innerHTML = `
                             <div class="victory-content">
-                                <button class="close-victory" onclick="closeVictoryScreen()">&times;</button>
                                 <h1 class="victory-text">CONGRATULATIONS!</h1>
                                 <h2 class="victory-subtext">You Are A Millionaire!</h2>
                                 <div class="money-amount">$1,000,000</div>
+                                <button class="close-victory" onclick="closeVictoryScreen()">See Results</button>
                             </div>
                         `;
                         document.body.appendChild(victoryOverlay);

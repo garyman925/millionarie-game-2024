@@ -309,7 +309,7 @@ function checkAnswer(selectedOption) {
         // 恢復問題框的透明度
         questionBox.style.opacity = '1';
         
-        // 切換回正常動畫
+        // 切換回正確動畫
         if (bugAnimation) {
             bugAnimation.canvas.style.display = 'block';
             if (bugCorrectAnimation) bugCorrectAnimation.canvas.style.display = 'none';
@@ -391,39 +391,6 @@ function updateStats() {
 
 // 開始遊戲
 startGame();
-
-// 添加鍵盤事件監聽器
-document.addEventListener('keydown', function(event) {
-    // 修改 'C' 鍵的測試部分
-    if (event.key === 'c' || event.key === 'C') {
-        const question = questions[currentQuestion];
-        AnimationModule.showConfetti();
-        
-        // 創建彈出元素
-        const popup = document.createElement('div');
-        popup.className = 'correct-popup';
-        popup.innerHTML = `
-            <h1 class="correct-text">YOU ARE CORRECT!</h1>
-            <div style="color: #00ff00; font-size: 1.5rem; margin-top: 20px;">
-                The answer is: ${question.options[question.correct]}
-            </div>
-        `;
-        
-        // 添加到頁面
-        document.body.appendChild(popup);
-        
-        // 使問題框變暗
-        const questionBox = document.getElementById("question");
-        questionBox.style.opacity = '0.3';
-        
-        // 2秒後移除彈出元素並恢復問題框
-        setTimeout(() => {
-            popup.remove();
-            questionBox.style.opacity = '1';
-            displayQuestion();
-        }, 2000);
-    }
-}); 
 
 // 在選項按鈕的點擊事件中
 document.querySelectorAll('.option').forEach(button => {
@@ -553,11 +520,3 @@ function showVictoryScreen() {
     // 60秒後停止 confetti
     setTimeout(() => clearInterval(interval), 60000);
 }
-
-// 添加鍵盤事件監聽器
-document.addEventListener('keydown', function(event) {
-    // 按 'V' 鍵顯示勝利畫面
-    if (event.key === 'v' || event.key === 'V') {
-        showVictoryScreen();
-    }
-});
